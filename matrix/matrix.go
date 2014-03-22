@@ -10,7 +10,7 @@ const epsilon = 1e-12
 type row []float64
 
 type Matrix struct {
-	nrow, ncol int
+	Nrow, Ncol int
 	Elem       []row
 }
 
@@ -20,7 +20,7 @@ type Pivot struct {
 
 // New returns a 0-matrix with the size initialized
 func New(nrow, ncol int) *Matrix {
-	m := Matrix{nrow: nrow, ncol: ncol, Elem: make([]row, nrow)}
+	m := Matrix{Nrow: nrow, Ncol: ncol, Elem: make([]row, nrow)}
 	for i := 0; i < nrow; i++ {
 		m.Elem[i] = make(row, ncol)
 	}
@@ -34,7 +34,7 @@ func NewPivot(row, col int) *Pivot {
 
 // Rank returns the rank of the matrix m
 func (m *Matrix) Rank() int {
-	return int(math.Min(float64(m.nrow), float64(m.ncol)))
+	return int(math.Min(float64(m.Nrow), float64(m.Ncol)))
 }
 
 // NewFromVector returns a pointer to a matrix populated with entries
@@ -68,16 +68,16 @@ func (m *Matrix) SwapCol(i, j int) *Matrix {
 
 // Row returns the ith row from m
 func (m *Matrix) Row(i int) *Matrix {
-	return NewFromVector(m.Elem[i], m.nrow)
+	return NewFromVector(m.Elem[i], m.Nrow)
 }
 
 // Col returns the ith column from m
 func (m *Matrix) Col(i int) *Matrix {
-	col := make([]float64, 0, m.ncol)
+	col := make([]float64, 0, m.Ncol)
 	for _, row := range m.Elem {
 		col = append(col, row[i])
 	}
-	return NewFromVector(col, m.nrow)
+	return NewFromVector(col, m.Nrow)
 }
 
 // Transpose returns the transpose of the matrix it is called on
@@ -92,7 +92,7 @@ func (m *Matrix) Transpose() *Matrix {
 			r[x][y] = e
 		}
 	}
-	return &Matrix{nrow: m.ncol, ncol: m.nrow, Elem: r}
+	return &Matrix{Nrow: m.Ncol, Ncol: m.Nrow, Elem: r}
 }
 
 // FindPivot finds the next element to pivot on in m
@@ -113,17 +113,17 @@ func (m *Matrix) FindPivot() Pivot {
 					}
 					return Pivot{Row: i, Col: j}
 				} else {
-					if i+1 == m.nrow && j+1 == m.ncol { // corner element; done pivoting
+					if i+1 == m.Nrow && j+1 == m.Ncol { // corner element; done pivoting
 						continue
 					}
 					zeroed := true
-					for k := i + 1; k < m.nrow; k++ {
+					for k := i + 1; k < m.Nrow; k++ {
 						if math.Abs(m.Elem[k][j]) > epsilon {
 							zeroed = false
 							break
 						}
 					}
-					if !zeroed || i+1 == m.nrow { // rest of column not zeroed or is last row
+					if !zeroed || i+1 == m.Nrow { // rest of column not zeroed or is last row
 						return Pivot{Row: i, Col: j}
 					}
 				}
@@ -189,7 +189,7 @@ func (m *Matrix) RowReduce() {
 
 // String returns the string representation of a Matrix
 func (m Matrix) String() (s string) {
-	s += fmt.Sprintf("%d-by-%d matrix\n", m.nrow, m.ncol)
+	s += fmt.Sprintf("%d-by-%d matrix\n", m.Nrow, m.Ncol)
 	for i, row := range m.Elem {
 		if i == 0 {
 			s += fmt.Sprint(row)

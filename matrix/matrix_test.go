@@ -11,11 +11,11 @@ func TestNew(t *testing.T) {
 	nrow := 5
 	ncol := 6
 	m := New(nrow, ncol)
-	if m.nrow != nrow {
-		t.Errorf("New matrix should have %d", nrow, "rows. Has %d", m.nrow)
+	if m.Nrow != nrow {
+		t.Errorf("New matrix should have %d", nrow, "rows. Has %d", m.Nrow)
 	}
-	if m.ncol != ncol {
-		t.Errorf("New matrix should have %d", ncol, "rows. Has %d", m.ncol)
+	if m.Ncol != ncol {
+		t.Errorf("New matrix should have %d", ncol, "rows. Has %d", m.Ncol)
 	}
 	for i := 0; i < nrow; i++ {
 		for j := 0; j < ncol; j++ {
@@ -46,13 +46,13 @@ func TestNewFromVector(t *testing.T) {
 	}
 
 	m = NewFromVector(vec, 0)
-	if m.nrow != 0 {
+	if m.Nrow != 0 {
 		t.Errorf("NewFromVector expected to return 0-by-0 matrix when provided with nrow = 0. Instead, "+
-			"produced matrix %d-by-%d", m.nrow, m.ncol)
+			"produced matrix %d-by-%d", m.Nrow, m.Ncol)
 	}
-	if m.ncol != 0 {
+	if m.Ncol != 0 {
 		t.Errorf("NewFromVector expected to return 0-by-0 matrix when provided with nrow = 0. Instead, "+
-			"produced matrix %d-by-%d", m.nrow, m.ncol)
+			"produced matrix %d-by-%d", m.Nrow, m.Ncol)
 	}
 }
 
@@ -147,7 +147,7 @@ func TestRowReduce(t *testing.T) {
 		m := NewFromVector(test.vec, test.nrow)
 		m.RowReduce()
 		check := NewFromVector(reducedTests[i].vec, test.nrow)
-		if check.ncol != m.ncol || check.nrow != m.nrow {
+		if check.Ncol != m.Ncol || check.Nrow != m.Nrow {
 			t.Error("RowReduce altering the number of rows/columns")
 		}
 		for j := range m.Elem {
